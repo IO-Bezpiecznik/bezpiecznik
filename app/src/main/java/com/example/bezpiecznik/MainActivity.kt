@@ -1,6 +1,7 @@
 package com.example.bezpiecznik
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -10,7 +11,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.bezpiecznik.data.AppDatabase
 import com.example.bezpiecznik.databinding.ActivityMainBinding
+import com.example.bezpiecznik.service.GridApi
+import com.example.bezpiecznik.types.GridCreateDto
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        AppDatabase.initializeConnection(applicationContext)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -37,6 +46,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val api = GridApi()
+            api.delete("61bf3ef8ec58691e0f82f9cf")
+            Log.i("as", api.getAll().toString())
+//            api.create(GridCreateDto(board = "new board"))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
