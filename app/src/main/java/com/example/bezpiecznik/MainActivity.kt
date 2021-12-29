@@ -41,18 +41,11 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home
+                R.id.nav_home, R.id.nav_grid_creator, R.id.nav_grid_list
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val api = GridApi()
-            api.delete("61bf3ef8ec58691e0f82f9cf")
-            Log.i("as", api.getAll().toString())
-//            api.create(GridCreateDto(board = "new board"))
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
