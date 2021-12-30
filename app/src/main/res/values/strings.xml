@@ -10,4 +10,12 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="create_grid">Create grid</string>
+    <string name="rozmiar_siatki">Rozmiar siatki</string>
+    <string name="x">X</string>
+    <string name="dodaj_siatk">Dodaj siatkę</string>
+    <string name="tworzenie_siatki">Tworzenie siatki</string>
+    <string name="lista_siatek">Lista siatek</string>
+    <string name="nowy_kod">Nowy kod</string>
+    <string name="grid_size">%1$d x %2$d</string>
 </resources>

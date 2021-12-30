@@ -10,5 +10,15 @@
         android:name="com.example.bezpiecznik.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/nav_grid_creator"
+        android:name="com.example.bezpiecznik.ui.gridCreator.GridCreatorFragment"
+        android:label="@string/tworzenie_siatki"
+        tools:layout="@layout/grid_creator_fragment" />
+    <fragment
+        android:id="@+id/nav_grid_list"
+        android:name="com.example.bezpiecznik.ui.gridList.GridListFragment"
+        android:label="@string/lista_siatek"
+        tools:layout="@layout/grid_list_fragment" />
 
 </navigation>

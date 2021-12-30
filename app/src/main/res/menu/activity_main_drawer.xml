@@ -8,5 +8,15 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />
+
+        <item
+            android:id="@+id/nav_grid_creator"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/tworzenie_siatki" />
+
+        <item
+            android:id="@+id/nav_grid_list"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/lista_siatek" />
     </group>
 </menu>
