@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bezpiecznik.databinding.GridListFragmentBinding
 
 class GridListFragment : Fragment() {
@@ -32,9 +33,13 @@ class GridListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.list.apply {
+            adapter = GridListAdapter()
+            layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+
         viewModel.list.observe(viewLifecycleOwner, {
-            it
-            // it - List<Grid>
+            (binding.list.adapter as GridListAdapter).updateList(it)
         })
     }
 }

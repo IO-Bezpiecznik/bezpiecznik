@@ -16,4 +16,6 @@
     <string name="dodaj_siatk">Dodaj siatkę</string>
     <string name="tworzenie_siatki">Tworzenie siatki</string>
     <string name="lista_siatek">Lista siatek</string>
+    <string name="nowy_kod">Nowy kod</string>
+    <string name="grid_size">%1$d x %2$d</string>
 </resources>

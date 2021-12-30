@@ -100,10 +100,10 @@ class GridCreatorViewModel : ViewModel() {
 
         val convertedGrid = gridState.grid.map { if (it) 1 else 0 }
 
-        val parsedArray = arrayOfNulls<Array<Int>>(gridState.col)
+        val parsedArray = arrayOfNulls<Array<Int>>(gridState.row)
         for (index in parsedArray.indices) {
-            val padding = index * gridState.row
-            parsedArray[index] = convertedGrid.slice((padding + 0) until padding + gridState.row).toTypedArray()
+            val padding = index * gridState.col
+            parsedArray[index] = convertedGrid.slice((padding + 0) until padding + gridState.col).toTypedArray()
         }
 
         CoroutineScope(IO).launch {
