@@ -1,14 +1,15 @@
 package com.example.bezpiecznik.data.grid
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
+import com.example.bezpiecznik.data.code.CodeEntity
 
 @Dao
 interface GridDao {
     @Insert
     fun insert(grid: GridEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMany(vararg grid: GridEntity)
 
     @Delete
     fun delete(grid: GridEntity)

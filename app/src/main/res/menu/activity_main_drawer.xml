@@ -18,5 +18,10 @@
             android:id="@+id/nav_grid_list"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/lista_siatek" />
+
+        <item
+            android:id="@+id/nav_export"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Kopia danych (do ustawien)" />
     </group>
 </menu>
