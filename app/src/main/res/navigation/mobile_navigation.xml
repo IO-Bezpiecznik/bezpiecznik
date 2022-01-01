@@ -20,5 +20,10 @@
         android:name="com.example.bezpiecznik.ui.gridList.GridListFragment"
         android:label="@string/lista_siatek"
         tools:layout="@layout/grid_list_fragment" />
+    <fragment
+        android:id="@+id/nav_export"
+        android:name="com.example.bezpiecznik.ui.exportImportData.ExportImportFragment"
+        android:label="Kopia danych"
+        tools:layout="@layout/export_import_fragment" />
 
 </navigation>

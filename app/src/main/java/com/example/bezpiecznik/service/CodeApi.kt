@@ -18,10 +18,6 @@ class CodeApi : Api() {
         return data
     }
 
-    suspend fun delete(id: String) {
-        database.codeDao().delete(CodeEntity(id))
-    }
-
     suspend fun getAll(): List<Code> {
         val data: List<Code> = client.request {
             url(getUrl("code"))

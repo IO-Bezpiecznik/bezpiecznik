@@ -18,4 +18,8 @@
     <string name="lista_siatek">Lista siatek</string>
     <string name="nowy_kod">Nowy kod</string>
     <string name="grid_size">%1$d x %2$d</string>
+    <string name="export">Eksport</string>
+    <string name="import_txt">Import</string>
+    <string name="export_desc">Funkcja eksportu danych pozwala zapisać Ci wszystkie twoje kodu i siatki, aby móc potem je odtworzyć na innym urządzeniu.</string>
+    <string name="import_desc">Funkcja importu pozwala Ci na odtworzenie zapisanych siatek i kodów z innego urządzenia.</string>
 </resources>
