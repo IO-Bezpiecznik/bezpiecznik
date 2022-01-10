@@ -15,6 +15,6 @@ abstract class Api {
     protected val database = AppDatabase.getConnection()
 
     protected fun getUrl(pathname: String): String {
-        return "http://10.0.2.2:3000/${pathname}"
+        return "https://fronthouse.eu/${pathname}"
     }
 }
