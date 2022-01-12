@@ -6,20 +6,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.bezpiecznik.R
 import com.example.bezpiecznik.databinding.GridListFragmentBinding
+import com.example.bezpiecznik.types.Grid
+import com.example.bezpiecznik.ui.home.HomeViewModel
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.decodeFromJsonElement
 
-class GridListFragment : Fragment() {
+class GridListFragment : Fragment(), GridListItemClickInterface {
     private var _binding: GridListFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: GridListViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
         viewModel =
             ViewModelProvider(this)[GridListViewModel::class.java]
 
@@ -33,13 +42,22 @@ class GridListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val adapter = GridListAdapter(this)
+
         binding.list.apply {
-            adapter = GridListAdapter()
+            this.adapter = adapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
 
         viewModel.list.observe(viewLifecycleOwner, {
             (binding.list.adapter as GridListAdapter).updateList(it)
         })
+    }
+
+    override fun onGridListItemClicked(gridListItem: Grid) {
+        val board = Json.decodeFromJsonElement<List<List<Int>>>(Json.parseToJsonElement(gridListItem.board) as JsonArray)
+        homeViewModel.listOfPoints = board
+        homeViewModel.size = listOf(board.count(), board[0].count())
+        findNavController().navigate(R.id.action_nav_grid_list_to_nav_home)
     }
 }
