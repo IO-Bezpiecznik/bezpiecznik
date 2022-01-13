@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 class HomeViewModel : ViewModel() {
 
-    var listOfPoints: List<List<Int>> = listOf(
+    var gridPoints: List<List<Int>> = listOf(
         listOf(1,1,1),
         listOf(1,1,1),
         listOf(1,1,1)

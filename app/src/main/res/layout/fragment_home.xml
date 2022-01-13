@@ -7,7 +7,7 @@
     tools:context=".ui.home.HomeFragment">
 
     <com.example.bezpiecznik.ui.lockPatternView.LockPatternView
-        android:id="@+id/plv_main"
+        android:id="@+id/lpv_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

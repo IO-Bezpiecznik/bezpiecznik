@@ -12,7 +12,7 @@ import android.widget.GridLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.bezpiecznik.R
-import com.example.bezpiecznik.ui.home.HomeViewModel
+import org.json.JSONObject
 
 class LockPatternView(context: Context, attributeSet: AttributeSet) :
     GridLayout(context, attributeSet) {
@@ -55,13 +55,15 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
     private var onPatternListener: OnPatternListener? = null
 
-    var listOfPoints: List<List<Int>> = listOf(
+    private var _gridPoints: List<List<Int>> = listOf(
         listOf(1,1,1),
         listOf(1,1,1),
         listOf(1,1,1)
     )
     private var allLines: MutableList<PatternLine> = mutableListOf()
     private var isFinished: Boolean = false
+    private var isCleared: Boolean = false
+    private var _patternString: String = ""
 
     init {
         normalDotColor = ContextCompat.getColor(context, R.color.normalColor)
@@ -84,7 +86,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
     private fun placeDots(){
         for(i in 0 until rowCount) {
             for(j in 0 until columnCount){
-                if(listOfPoints[i][j] == 0){
+                if(_gridPoints[i][j] == 0){
                     val dot = Dot(context, i * columnCount + j,
                         emptyDotColor, normalDotRadiusRatio,
                         selectedDotColor, selectedDotRadiusRatio, columnCount)
@@ -157,15 +159,44 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         return ids
     }
 
-    fun setOnPatternListener(listener: OnPatternListener){
-        onPatternListener = listener
+    fun setPattern(patternString: String){
+        _patternString = patternString
+    }
+
+    private fun drawPattern(patternString: String){
+        try {
+            val pattern = JSONObject(patternString)
+            if(pattern.length() != 0){
+                for(i in 1..pattern.length()){
+                    for(dot in dots){
+                        if(dot.index == pattern["$i"]){
+                            if(!selectedDots.contains(dot)){
+                                notifyDotSelected(dot)
+                            }
+                        }
+                    }
+                }
+                onFinish()
+            }
+        } catch (e: Exception){
+            isCleared = true
+        }
     }
 
     fun setSize(height: Int, width: Int){
-        removeAllViews()
         rowCount = height
         columnCount = width
+    }
+
+    fun render(){
+        isCleared = false
+        removeAllViews()
+        dots.clear()
         placeDots()
+    }
+
+    fun setGridPoints(gridPoints: List<List<Int>>){
+        _gridPoints = gridPoints
     }
 
     override fun dispatchDraw(canvas: Canvas?) {
@@ -174,6 +205,9 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         if(selectedDots.count() > 0 && lastX > 0f && lastY > 0f){
             val center = selectedDots[selectedDots.count() - 1].getCenter()
             canvas?.drawLine(center.x.toFloat(),center.y.toFloat(),lastX,lastY,linePaint)
+        }
+        if(!isFinished && !isCleared){
+            drawPattern(_patternString)
         }
     }
 
@@ -202,11 +236,13 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
     }
 
     private fun onFinish() {
-        lastX = 0f
-        lastY = 0f
-        isFinished = true
-        invalidate()
-        Toast.makeText(context, generateSelectedIds().toString(), Toast.LENGTH_SHORT).show()
+        if(!isFinished){
+            lastX = 0f
+            lastY = 0f
+            isFinished = true
+            invalidate()
+            Toast.makeText(context, generateSelectedIds().toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun reset() {
@@ -219,6 +255,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         lastX = 0f
         lastY = 0f
         isFinished = false
+        isCleared = true
         allLines.clear()
         invalidate()
     }
@@ -240,7 +277,6 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
     interface OnPatternListener {
         fun onStarted(){}
-        fun onProgress(ids: java.util.ArrayList<Int>){}
-        fun onComplete(ids: java.util.ArrayList<Int>) : Boolean
+        fun onProgress(ids: ArrayList<Int>){}
     }
 }

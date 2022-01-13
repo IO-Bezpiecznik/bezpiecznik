@@ -56,7 +56,7 @@ class GridListFragment : Fragment(), GridListItemClickInterface {
 
     override fun onGridListItemClicked(gridListItem: Grid) {
         val board = Json.decodeFromJsonElement<List<List<Int>>>(Json.parseToJsonElement(gridListItem.board) as JsonArray)
-        homeViewModel.listOfPoints = board
+        homeViewModel.gridPoints = board
         homeViewModel.size = listOf(board.count(), board[0].count())
         findNavController().navigate(R.id.action_nav_grid_list_to_nav_home)
     }
