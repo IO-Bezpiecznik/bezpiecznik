@@ -14,7 +14,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
 
-class GridListAdapter: RecyclerView.Adapter<GridListAdapter.ViewHolder>() {
+class GridListAdapter(
+    private val gridListItemClickInterface: GridListItemClickInterface
+): RecyclerView.Adapter<GridListAdapter.ViewHolder>() {
     private var dataSet: List<Grid> = emptyList()
 
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
@@ -71,7 +73,7 @@ class GridListAdapter: RecyclerView.Adapter<GridListAdapter.ViewHolder>() {
         viewHolder.setSize(board[0].size, board.size)
         viewHolder.generateGrid(board)
         viewHolder.btn.setOnClickListener {
-            // TODO: Redirect to code creator
+            gridListItemClickInterface.onGridListItemClicked(data)
         }
     }
 
@@ -81,4 +83,8 @@ class GridListAdapter: RecyclerView.Adapter<GridListAdapter.ViewHolder>() {
         this.dataSet = grids
         notifyDataSetChanged()
     }
+}
+
+interface GridListItemClickInterface{
+    fun onGridListItemClicked(gridListItem: Grid)
 }

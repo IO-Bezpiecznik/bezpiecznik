@@ -8,4 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="black_white">#80545454</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="normalColor">#303030</color>
+    <color name="selectedColor">#334267</color>
+    <color name="wrongColor">#9E2F2F</color>
+    <color name="emptyColor">#00000000</color>
 </resources>
