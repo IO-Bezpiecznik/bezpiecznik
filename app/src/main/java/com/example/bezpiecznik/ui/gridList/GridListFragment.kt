@@ -2,6 +2,7 @@ package com.example.bezpiecznik.ui.gridList
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,6 +57,7 @@ class GridListFragment : Fragment(), GridListItemClickInterface {
 
     override fun onGridListItemClicked(gridListItem: Grid) {
         val board = Json.decodeFromJsonElement<List<List<Int>>>(Json.parseToJsonElement(gridListItem.board) as JsonArray)
+        homeViewModel.gridID = gridListItem._id
         homeViewModel.gridPoints = board
         homeViewModel.size = listOf(board.count(), board[0].count())
         findNavController().navigate(R.id.action_nav_grid_list_to_nav_home)
