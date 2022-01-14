@@ -23,4 +23,6 @@
     <string name="export_desc">Funkcja eksportu danych pozwala zapisać Ci wszystkie twoje kodu i siatki, aby móc potem je odtworzyć na innym urządzeniu.</string>
     <string name="import_desc">Funkcja importu pozwala Ci na odtworzenie zapisanych siatek i kodów z innego urządzenia.</string>
     <string name="list_pattern">Lista kodów</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

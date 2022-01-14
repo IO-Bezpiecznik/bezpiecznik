@@ -29,5 +29,10 @@
         android:name="com.example.bezpiecznik.ui.exportImportData.ExportImportFragment"
         android:label="Kopia danych"
         tools:layout="@layout/export_import_fragment" />
+    <fragment
+        android:id="@+id/nav_code_list"
+        android:name="com.example.bezpiecznik.ui.codeList.CodeListFragment"
+        android:label="Lista kodów"
+        tools:layout="@layout/code_list_fragment" />
 
 </navigation>

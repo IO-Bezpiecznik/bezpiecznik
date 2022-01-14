@@ -20,7 +20,7 @@
             android:title="@string/lista_siatek" />
 
         <item
-            android:id="@+id/nav_pattern_list"
+            android:id="@+id/nav_code_list"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/list_pattern" />
         <item
