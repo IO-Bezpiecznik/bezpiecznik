@@ -21,6 +21,8 @@ class HomeViewModel : ViewModel() {
         listOf(1,1,1)
     )
 
+    var loadedFromList = false
+
     var size: List<Int> = listOf(3, 3)
 
     var pattern = ""
