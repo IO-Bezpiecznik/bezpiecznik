@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Code (
-    val gridId: String,
+    val grid: Grid,
     val points: Int,
     val username: String,
     val pattern: String,

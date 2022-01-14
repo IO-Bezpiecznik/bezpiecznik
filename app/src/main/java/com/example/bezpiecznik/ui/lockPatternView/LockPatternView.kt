@@ -151,7 +151,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         }
     }
 
-    private fun generateSelectedIds(): ArrayList<Int> {
+    fun generateSelectedIds(): ArrayList<Int> {
         val ids = ArrayList<Int>()
         for(dot in selectedDots){
             ids.add(dot.index)
@@ -241,8 +241,11 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             lastY = 0f
             isFinished = true
             invalidate()
-            Toast.makeText(context, generateSelectedIds().toString(), Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, generateSelectedIds().toString(), Toast.LENGTH_SHORT).show()
         }
+    }
+    fun getFinish():Boolean{
+        return isFinished
     }
 
     fun reset() {
