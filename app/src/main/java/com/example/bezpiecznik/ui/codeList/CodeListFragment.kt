@@ -54,12 +54,12 @@ class CodeListFragment : Fragment(), CodeListItemClickInterface {
 
 
     override fun onCodeListItemClicked(codeListItem: Code) {
-        //val board = Json.decodeFromJsonElement<List<List<Int>>>(Json.parseToJsonElement(codeListItem.board) as JsonArray)
-        //homeViewModel.gridID = codeListItem._id
-        //homeViewModel.gridPoints = board
-        //homeViewModel.size = listOf(board.count(), board[0].count())
-        //findNavController().navigate(R.id.action_nav_grid_list_to_nav_home)
-        TODO("Not yet implemented")
+        val board = Json.decodeFromJsonElement<List<List<Int>>>(Json.parseToJsonElement(codeListItem.grid.board) as JsonArray)
+        homeViewModel.gridID = codeListItem._id
+        homeViewModel.gridPoints = board
+        homeViewModel.size = listOf(board.count(), board[0].count())
+        homeViewModel.pattern = codeListItem.pattern
+        findNavController().navigate(R.id.action_nav_code_list_to_nav_home)
     }
 
 }

@@ -24,12 +24,14 @@ class CodeListAdapter(
         private val lpv: LockPatternView = view.findViewById(R.id.lpv_code)
         val btn: Button = view.findViewById(R.id.code_item_btn)
         private val progressBar: ProgressBar = view.findViewById(R.id.progressBar)
+        private val pointsTextView: TextView = view.findViewById(R.id.points)
         fun setSize(s1: Int, s2: Int) {
             gridSize.text = view.resources.getString(R.string.grid_size, s1, s2)
         }
         fun generateBar(value: Int){
             progressBar.max = 100
             progressBar.progress = value
+            pointsTextView.text = "$value %"
         }
         fun generateCode(board: List<List<Int>>,pattern: String) {
             lpv.setGridPoints(board)

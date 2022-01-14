@@ -60,6 +60,7 @@ class GridListFragment : Fragment(), GridListItemClickInterface {
         homeViewModel.gridID = gridListItem._id
         homeViewModel.gridPoints = board
         homeViewModel.size = listOf(board.count(), board[0].count())
+        homeViewModel.pattern = ""
         findNavController().navigate(R.id.action_nav_grid_list_to_nav_home)
     }
 }

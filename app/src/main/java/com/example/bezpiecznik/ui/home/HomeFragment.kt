@@ -43,6 +43,7 @@ class HomeFragment : Fragment() {
         val lpv: LockPatternView = binding.lpvMain
         lpv.setGridPoints(homeViewModel.gridPoints)
         lpv.setSize(homeViewModel.size[0], homeViewModel.size[1])
+        lpv.setPattern(homeViewModel.pattern)
         lpv.render()
 
         val resetButton: Button = binding.btnReset

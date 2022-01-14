@@ -23,6 +23,8 @@ class HomeViewModel : ViewModel() {
 
     var size: List<Int> = listOf(3, 3)
 
+    var pattern = ""
+
     lateinit var gridID: String
 
     fun saveCode(code: CodeCreateDto) {
