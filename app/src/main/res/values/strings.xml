@@ -22,10 +22,9 @@
     <string name="import_txt">Import</string>
     <string name="export_desc">Funkcja eksportu danych pozwala zapisać Ci wszystkie twoje kodu i siatki, aby móc potem je odtworzyć na innym urządzeniu.</string>
     <string name="import_desc">Funkcja importu pozwala Ci na odtworzenie zapisanych siatek i kodów z innego urządzenia.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="bezpiecznik">BEZPIECZNIK</string>
     <string name="autorzy_n_mateusz_bereta_n_damian_tka_n_jakub_sydor_n_tymoteusz_kubica">Autorzy: \n Mateusz Bereta \n Damian Łątka \n Jakub Sydor \n Tymoteusz Kubica</string>
     <string name="tester_bezpiecze_stwa_kodu_wzorcowego">Tester bezpieczeństwa kodu wzorcowego</string>
     <string name="rozpocznij">Rozpocznij</string>
+    <string name="list_pattern">Lista kodów</string>
 </resources>

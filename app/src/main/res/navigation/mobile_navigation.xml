@@ -30,6 +30,7 @@
         android:label="Kopia danych"
         tools:layout="@layout/export_import_fragment" />
     <fragment
+
         android:id="@+id/startFragment"
         android:name="com.example.bezpiecznik.ui.start.StartFragment"
         android:label="fragment_start"
@@ -38,5 +39,13 @@
             android:id="@+id/action_startFragment_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
-
+    <fragment
+        android:id="@+id/nav_code_list"
+        android:name="com.example.bezpiecznik.ui.codeList.CodeListFragment"
+        android:label="Lista kodów"
+        tools:layout="@layout/code_list_fragment" >
+        <action
+            android:id="@+id/action_nav_code_list_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
 </navigation>
