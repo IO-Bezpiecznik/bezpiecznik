@@ -247,6 +247,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         if(!paddingChanged){
             paddingChanged = true
             val paddingV = (measuredHeight - (measuredWidth / columnCount) * rowCount) / 2
+            Log.i("MyAc", "$measuredHeight $measuredWidth")
             updatePadding(0, paddingV, 0, paddingV)
         }
     }
