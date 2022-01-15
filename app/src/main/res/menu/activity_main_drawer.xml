@@ -24,8 +24,8 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/list_pattern" />
         <item
-            android:id="@+id/nav_export"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Kopia danych (do ustawien)" />
+            android:title="Ustawienia" />
     </group>
 </menu>
