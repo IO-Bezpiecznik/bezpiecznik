@@ -10,7 +10,6 @@ import android.widget.AdapterView
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.databinding.GridCreatorFragmentBinding
@@ -55,23 +54,31 @@ class GridCreatorFragment : Fragment() {
         viewModel.grid.observe(viewLifecycleOwner, {
             binding.gridContainer.removeAllViews()
 
-            val width = requireContext().resources.displayMetrics.widthPixels
-            val totalSpace = width - 300 - 4 * it.row
-            val spacePerItem = totalSpace / if (it.row > it.col) it.row else it.col
+            val deviceWidth = requireContext().resources.displayMetrics.widthPixels
+            val deviceHeight = requireContext().resources.displayMetrics.widthPixels
+
+            val availableWidth = deviceWidth - (250 * view.resources.displayMetrics.density).toInt() - (it.col * 24)
+            val availableHeight = deviceHeight - (97 * view.resources.displayMetrics.density).toInt() - binding.cardView.height - binding.button.height - (it.row * 24)
+
+            val colMargin = availableWidth / (it.col)
+            val rowMargin = availableHeight / (it.row)
 
             binding.gridContainer.columnCount = it.col
             binding.gridContainer.rowCount = it.row
 
             for (index in it.grid.indices) {
                 val imageView = ImageView(requireContext())
-                imageView.setImageResource(R.drawable.grid_point)
+
+                if (!it.grid[index]) {
+                    imageView.setImageResource(R.drawable.grid_point_off)
+                } else {
+                    imageView.setImageResource(R.drawable.grid_point)
+                }
+
                 val params = GridLayout.LayoutParams()
-                params.width = spacePerItem
-                params.height = spacePerItem
+                params.setMargins(colMargin, rowMargin, colMargin, rowMargin)
                 imageView.layoutParams = params
 
-                imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black))
-                if (!it.grid[index]) imageView.alpha = 0.2F
                 imageView.setOnClickListener {
                     viewModel.handleGridPointClick(index)
                 }

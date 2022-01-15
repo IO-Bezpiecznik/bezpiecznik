@@ -1,6 +1,5 @@
 package com.example.bezpiecznik.ui.gridList
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.types.Grid
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -47,11 +45,11 @@ class GridListAdapter(
                 val imageView = ImageView(view.context)
                 imageView.setImageResource(R.drawable.grid_point)
                 val params = GridLayout.LayoutParams()
-                params.width = spacePerItem
-                params.height = spacePerItem
+                params.width = (16 * view.resources.displayMetrics.density).toInt()
+                params.height = (16 * view.resources.displayMetrics.density).toInt()
                 imageView.layoutParams = params
 
-                imageView.setColorFilter(ContextCompat.getColor(view.context, R.color.black))
+                imageView.setColorFilter(ContextCompat.getColor(view.context, R.color.normalColor))
                 if (list[index] == 0) imageView.alpha = 0F
                 grid.addView(imageView)
             }
