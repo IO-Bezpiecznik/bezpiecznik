@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.GridLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.MutableLiveData
 import com.example.bezpiecznik.R
 import org.json.JSONObject
 
@@ -25,6 +27,10 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         const val DEFAULT_ROW_AMOUNT = 3
         const val DEFAULT_COLUMN_AMOUNT = 3
         const val DEFAULT_HIT_AREA_PADDING_RATIO = 0.14f
+
+        const val INTERSECTION_POINTS = 3
+        const val TURN_POINTS = 1
+        const val NEW_DOT_POINTS = 1
     }
 
     private var normalDotColor: Int = 0
@@ -65,6 +71,9 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
     private var isFinished: Boolean = false
     private var isCleared: Boolean = false
     private var _patternString: String = ""
+
+    val score: MutableLiveData<Int> = MutableLiveData()
+    private var _score: Int = 0
 
     init {
         normalDotColor = ContextCompat.getColor(context, R.color.normalColor)
@@ -137,6 +146,8 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
     private fun notifyDotSelected(dot: Dot){
         selectedDots.add(dot)
+        addPoints(NEW_DOT_POINTS)
+
         onPatternListener?.onProgress(generateSelectedIds())
         dot.setState(State.SELECTED)
         val center = dot.getCenter()
@@ -148,6 +159,30 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             val startPoint = MatrixPoint(startDot.index % columnCount, startDot.index / rowCount)
             val endPoint = MatrixPoint(dot.index % columnCount, dot.index / rowCount)
             val newLine = PatternLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+            if(allLines.count() > 0){
+                if(allLines.last().dy() == 0 && newLine.dy() == 0){
+                    // kreska pozioma
+                    newLine.startPoint = allLines.last().startPoint
+                    allLines.removeLast()
+                } else if (allLines.last().dx() == 0 && newLine.dx() == 0){
+                    // kreska pionowa
+                    newLine.startPoint = allLines.last().startPoint
+                    allLines.removeLast()
+                } else if (allLines.last().dy() != 0 && newLine.dy() != 0){
+                    // skosy
+                    if(
+                        (allLines.last().dx() / allLines.last().dy()).toFloat() == (newLine.dx() / newLine.dy().toFloat())
+                    ){
+                        newLine.startPoint = allLines.last().startPoint
+                        allLines.removeLast()
+                    }
+                }
+            }
+            for(line in allLines){
+                if(newLine.startPoint != line.endPoint && newLine.intersects(line)){
+                    addPoints(INTERSECTION_POINTS)
+                }
+            }
             allLines.add(newLine)
         }
     }
@@ -189,6 +224,11 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         columnCount = width
     }
 
+    fun addPoints(points: Int){
+        _score += points
+        score.value = _score
+    }
+
     fun render(){
         isCleared = false
         removeAllViews()
@@ -207,6 +247,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         if(!paddingChanged){
             paddingChanged = true
             val paddingV = (measuredHeight - (measuredWidth / columnCount) * rowCount) / 2
+            Log.i("MyAc", "$measuredHeight $measuredWidth")
             updatePadding(0, paddingV, 0, paddingV)
         }
     }
@@ -240,8 +281,6 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
             MotionEvent.ACTION_UP -> onFinish()
 
-            MotionEvent.ACTION_CANCEL -> reset()
-
             else -> return false
         }
         return true
@@ -253,7 +292,6 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             lastY = 0f
             isFinished = true
             invalidate()
-            //Toast.makeText(context, generateSelectedIds().toString(), Toast.LENGTH_SHORT).show()
         }
     }
     fun getFinish():Boolean{
@@ -272,6 +310,8 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         isFinished = false
         isCleared = true
         allLines.clear()
+        _score = 0
+        score.value = 0
         invalidate()
     }
 

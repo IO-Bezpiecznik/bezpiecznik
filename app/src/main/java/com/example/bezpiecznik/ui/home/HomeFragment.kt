@@ -20,6 +20,7 @@ import android.provider.Settings.Secure
 import androidx.core.content.ContextCompat.getSystemService
 
 import android.telephony.TelephonyManager
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 
 
@@ -40,11 +41,17 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val pbPoints: ProgressBar = binding.pbScore
+
         val lpv: LockPatternView = binding.lpvMain
         lpv.setGridPoints(homeViewModel.gridPoints)
         lpv.setSize(homeViewModel.size[0], homeViewModel.size[1])
         lpv.setPattern(homeViewModel.pattern)
         lpv.render()
+
+        lpv.score.observe(this.viewLifecycleOwner,{
+            pbPoints.progress = it
+        })
 
         val resetButton: Button = binding.btnReset
         val saveButton: Button = binding.btnSave
@@ -83,7 +90,7 @@ class HomeFragment : Fragment() {
                 requireContext().contentResolver,
                 Secure.ANDROID_ID
             )
-            val code = CodeCreateDto(pattern = json, gridId = homeViewModel.gridID, username = android_id, points = 0)
+            val code = CodeCreateDto(pattern = json, gridId = homeViewModel.gridID, username = android_id, points = lpv.score.value!!)
             homeViewModel.saveCode(code)
             Toast.makeText(context, "Zapisano", Toast.LENGTH_SHORT).show()
         }
