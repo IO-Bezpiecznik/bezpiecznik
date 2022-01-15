@@ -10,10 +10,20 @@
         android:id="@+id/lpv_main"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_reset"
+        app:layout_constraintBottom_toTopOf="@+id/pb_score"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/pb_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:progressDrawable="@drawable/gradient"
+        app:layout_constraintBottom_toTopOf="@+id/btn_reset"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"/>
 
     <Button
         android:id="@+id/btn_reset"
