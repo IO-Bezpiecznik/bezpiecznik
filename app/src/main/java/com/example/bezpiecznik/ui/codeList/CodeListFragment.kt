@@ -59,6 +59,7 @@ class CodeListFragment : Fragment(), CodeListItemClickInterface {
         homeViewModel.gridPoints = board
         homeViewModel.size = listOf(board.count(), board[0].count())
         homeViewModel.pattern = codeListItem.pattern
+        homeViewModel.loadedFromList = true
         findNavController().navigate(R.id.action_nav_code_list_to_nav_home)
     }
 

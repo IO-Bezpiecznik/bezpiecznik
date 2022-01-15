@@ -14,15 +14,19 @@ class Dot(
     private var normalDotRadiusRatio: Float,
     private var selectedDotColor: Int,
     private var selectedDotRadiusRatio: Float,
-    private var columnCount: Int
+    private var columnCount: Int,
+    private var rowCount: Int
 ) : View(context) {
 
     private var dotState: State = State.NORMAL
     private var paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val width = MeasureSpec.getSize(widthMeasureSpec) / columnCount
-        setMeasuredDimension(width, width)
+        var length = MeasureSpec.getSize(widthMeasureSpec) / columnCount
+        if(length * rowCount > MeasureSpec.getSize(heightMeasureSpec)){
+            length = MeasureSpec.getSize(heightMeasureSpec) / rowCount
+        }
+        setMeasuredDimension(length, length)
     }
 
     override fun onDraw(canvas: Canvas?) {

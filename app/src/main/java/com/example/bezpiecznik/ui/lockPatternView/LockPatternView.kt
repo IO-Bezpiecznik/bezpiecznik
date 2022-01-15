@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.GridLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.updatePadding
 import com.example.bezpiecznik.R
 import org.json.JSONObject
 
@@ -89,14 +90,14 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 if(_gridPoints[i][j] == 0){
                     val dot = Dot(context, i * columnCount + j,
                         emptyDotColor, normalDotRadiusRatio,
-                        selectedDotColor, selectedDotRadiusRatio, columnCount)
+                        selectedDotColor, selectedDotRadiusRatio, columnCount, rowCount)
                     val padding = spacing / 2
                     dot.setPadding(padding, padding, padding, padding)
                     addView(dot)
                 } else {
                     val dot = Dot(context, i * columnCount + j,
                         normalDotColor, normalDotRadiusRatio,
-                        selectedDotColor, selectedDotRadiusRatio, columnCount)
+                        selectedDotColor, selectedDotRadiusRatio, columnCount, rowCount)
                     val padding = spacing / 2
                     dot.setPadding(padding, padding, padding, padding)
                     addView(dot)
@@ -197,6 +198,17 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
     fun setGridPoints(gridPoints: List<List<Int>>){
         _gridPoints = gridPoints
+    }
+
+    private var paddingChanged = false
+
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        super.onMeasure(widthSpec, heightSpec)
+        if(!paddingChanged){
+            paddingChanged = true
+            val paddingV = (measuredHeight - (measuredWidth / columnCount) * rowCount) / 2
+            updatePadding(0, paddingV, 0, paddingV)
+        }
     }
 
     override fun dispatchDraw(canvas: Canvas?) {

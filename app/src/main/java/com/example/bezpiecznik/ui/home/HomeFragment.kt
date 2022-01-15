@@ -47,10 +47,18 @@ class HomeFragment : Fragment() {
         lpv.render()
 
         val resetButton: Button = binding.btnReset
+        val saveButton: Button = binding.btnSave
+
+        if(homeViewModel.loadedFromList){
+            saveButton.isEnabled = false
+        }
+
         resetButton.setOnClickListener {
             lpv.reset()
+            saveButton.isEnabled = true
+            homeViewModel.pattern = ""
         }
-        val saveButton: Button = binding.btnSave
+
         saveButton.setOnClickListener {
             save(lpv)
         }
