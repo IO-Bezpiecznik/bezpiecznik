@@ -299,20 +299,18 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             if(dotx==columnCount-1){square_right=square_right+1}
             if(doty==0){square_top=square_top+1}
             if(doty==rowCount-1){square_bottom=square_bottom+1}
-            if((dotx!=0&&dotx!=columnCount-1)&&(doty!=0&&doty!=rowCount-1)){square_check=false; Log.i("MyArr","DUPAAA")}
+            if((dotx!=0&&dotx!=columnCount-1)&&(doty!=0&&doty!=rowCount-1)){square_check=false}
 
             if(square_second_check==-1){square_second_check=-2}
             if(square_top==columnCount && square_bottom==columnCount && square_left==rowCount && square_right==rowCount&&square_check==true){
 
                 _tmp_score=_score
-                Log.i("MyArr","LALALALA "+_tmp_score+"  "+_score)
                 square_second_check=-1
                 //square_check=false
                 score.value=0
             }
-            if(square_second_check==-2&&square_check==false){_score=_tmp_score; score.value=_score; square_second_check=0;Log.i("MyArr","JESTEMTU")}
+            if(square_second_check==-2&&square_check==false){_score=_tmp_score; score.value=_score; square_second_check=0}
 
-            Log.i("MyArr", "X "+square_check+" Y "+square_second_check)
 
             //S-Shape
 
