@@ -15,7 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
 import com.example.bezpiecznik.R
+import com.example.bezpiecznik.data.AppDatabase_Impl
 import org.json.JSONObject
+import java.lang.Math.abs
+import kotlin.math.floor
 
 class LockPatternView(context: Context, attributeSet: AttributeSet) :
     GridLayout(context, attributeSet) {
@@ -29,8 +32,10 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         const val DEFAULT_HIT_AREA_PADDING_RATIO = 0.14f
 
         const val INTERSECTION_POINTS = 3
-        const val TURN_POINTS = 1
+        const val KNIGHT_TURN_POINTS = 3
         const val NEW_DOT_POINTS = 1
+        const val RADIUS_POINTS=0.5
+        const val STARTPOINT_POINTS=-5
     }
 
     private var normalDotColor: Int = 0
@@ -75,6 +80,10 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
     val score: MutableLiveData<Int> = MutableLiveData()
     private var _score: Int = 0
 
+    var startpoint_tmp=true
+    var patternlist= arrayOf<Array<Int>>()
+
+
     init {
         normalDotColor = ContextCompat.getColor(context, R.color.normalColor)
         normalDotRadiusRatio = DEFAULT_RADIUS_RATIO
@@ -114,6 +123,9 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 }
             }
         }
+
+        // points for grid size
+        addPoints((dots.count() * RADIUS_POINTS).toInt())
     }
 
     private fun initPathPaint() {
@@ -148,6 +160,19 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         selectedDots.add(dot)
         addPoints(NEW_DOT_POINTS)
 
+        //startpoint points
+        if (startpoint_tmp==true)
+        {
+            startpoint_tmp=false
+            if(dot.x==0f&&dot.y==0f)
+            {
+
+                addPoints(STARTPOINT_POINTS)
+
+            }
+
+        }
+
         onPatternListener?.onProgress(generateSelectedIds())
         dot.setState(State.SELECTED)
         val center = dot.getCenter()
@@ -157,17 +182,20 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             linePath.lineTo(center.x.toFloat(),center.y.toFloat())
             val startDot: Dot = selectedDots[selectedDots.count() - 2]
             val startPoint = MatrixPoint(startDot.index % columnCount, startDot.index / columnCount)
-            val endPoint = MatrixPoint(dot.index % columnCount, dot.index / columnCount)
+            val endPoint = MatrixPoint(dot.index % columnCount, dot.index /columnCount)
             val newLine = PatternLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+            var isconeccted=false
             if(allLines.count() > 0){
                 if(allLines.last().dy() == 0 && newLine.dy() == 0){
                     // kreska pozioma
                     newLine.startPoint = allLines.last().startPoint
                     allLines.removeLast()
+                    isconeccted=true
                 } else if (allLines.last().dx() == 0 && newLine.dx() == 0){
                     // kreska pionowa
                     newLine.startPoint = allLines.last().startPoint
                     allLines.removeLast()
+                    isconeccted=true
                 } else if (allLines.last().dy() != 0 && newLine.dy() != 0){
                     // skosy
                     if(
@@ -175,6 +203,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                     ){
                         newLine.startPoint = allLines.last().startPoint
                         allLines.removeLast()
+                        isconeccted=true
                     }
                 }
             }
@@ -183,8 +212,39 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                     addPoints(INTERSECTION_POINTS)
                 }
             }
+
+            if(!isconeccted) {
+                for (line in allLines) {
+                    if ((newLine.startPoint == line.endPoint &&
+                                newLine.endPoint.x == line.endPoint.x &&
+                                abs(line.startPoint.x - line.endPoint.x) >= 2 &&
+                                abs(newLine.endPoint.y - line.endPoint.y) >= 1)
+                    ) {
+                        addPoints(KNIGHT_TURN_POINTS)
+                    }
+                    if ((newLine.startPoint == line.endPoint &&
+                                newLine.endPoint.y == line.endPoint.y &&
+                                abs(line.startPoint.y - line.endPoint.y) >= 2 &&
+                                abs(newLine.endPoint.x - line.endPoint.x) >= 1)
+                    ) {
+                        addPoints(KNIGHT_TURN_POINTS)
+                    }
+                }
+            }
             allLines.add(newLine)
         }
+
+        //pattern_check_list=generateSelectedIds()
+        checkGenericPatterns()
+
+        //pattern points value cap
+        if(_score>=100){
+
+            _score=100
+            score.value=_score
+
+        }
+
     }
 
     fun generateSelectedIds(): ArrayList<Int> {
@@ -193,6 +253,77 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             ids.add(dot.index)
         }
         return ids
+    }
+
+    fun checkGenericPatterns(){
+
+        //square values
+        var square_top:Int=0
+        var square_left:Int=0
+        var square_bottom:Int=0
+        var square_right:Int=0
+        var square_check:Boolean=true
+        var square_second_check:Int=0
+        var _tmp_score=0
+
+        //S-shape values
+        var s_shape_checkx:Boolean=true
+        var s_shape_pattern:String=""
+        var s_shape_swith:Boolean=true
+        var s_shape_checky:Boolean=false
+
+
+        //initializing array
+        for (i in 0..rowCount) {
+            var array = arrayOf<Int>()
+            for (j in 0..columnCount) {
+                array += 0
+            }
+            patternlist += array
+        }
+
+
+
+        for (dot in selectedDots){
+
+
+            var dotx=dot.index % columnCount
+            var doty=dot.index / columnCount
+
+
+
+
+
+            //square
+            if(dotx==0){square_left=square_left+1}
+            if(dotx==columnCount-1){square_right=square_right+1}
+            if(doty==0){square_top=square_top+1}
+            if(doty==rowCount-1){square_bottom=square_bottom+1}
+            if((dotx!=0&&dotx!=columnCount-1)&&(doty!=0&&doty!=rowCount-1)){square_check=false}
+
+            if(square_second_check==-1){square_second_check=-2}
+            if(square_top==columnCount && square_bottom==columnCount && square_left==rowCount && square_right==rowCount&&square_check==true){
+
+                _tmp_score=_score
+                square_second_check=-1
+                //square_check=false
+                score.value=0
+            }
+            if(square_second_check==-2&&square_check==false){_score=_tmp_score; score.value=_score; square_second_check=0}
+
+
+            //S-Shape
+
+
+
+        }
+
+        s_shape_pattern=generateSelectedIds().toString()
+
+
+
+
+
     }
 
     fun setPattern(patternString: String){
@@ -215,6 +346,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 onFinish()
             }
         } catch (e: Exception){
+
             isCleared = true
         }
     }
@@ -247,7 +379,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         if(!paddingChanged){
             paddingChanged = true
             val paddingV = (measuredHeight - (measuredWidth / columnCount) * rowCount) / 2
-            Log.i("MyAc", "$measuredHeight $measuredWidth")
+
             updatePadding(0, paddingV, 0, paddingV)
         }
     }
@@ -261,6 +393,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         }
         if(!isFinished && !isCleared){
             drawPattern(_patternString)
+
         }
     }
 
@@ -299,6 +432,11 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
     }
 
     fun reset() {
+        _score = 0
+        score.value = 0
+        //points for grid radius
+        addPoints((dots.count() * RADIUS_POINTS).toInt())
+        //
         for(dot in selectedDots){
             dot.reset()
         }
@@ -310,8 +448,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         isFinished = false
         isCleared = true
         allLines.clear()
-        _score = 0
-        score.value = 0
+        startpoint_tmp=true
         invalidate()
     }
 
