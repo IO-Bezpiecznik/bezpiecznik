@@ -156,8 +156,8 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         } else {
             linePath.lineTo(center.x.toFloat(),center.y.toFloat())
             val startDot: Dot = selectedDots[selectedDots.count() - 2]
-            val startPoint = MatrixPoint(startDot.index % columnCount, startDot.index / rowCount)
-            val endPoint = MatrixPoint(dot.index % columnCount, dot.index / rowCount)
+            val startPoint = MatrixPoint(startDot.index % columnCount, startDot.index / columnCount)
+            val endPoint = MatrixPoint(dot.index % columnCount, dot.index / columnCount)
             val newLine = PatternLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
             if(allLines.count() > 0){
                 if(allLines.last().dy() == 0 && newLine.dy() == 0){
