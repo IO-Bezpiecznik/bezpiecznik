@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.bezpiecznik.data.AppDatabase
 import com.example.bezpiecznik.databinding.ActivityMainBinding
 import com.example.bezpiecznik.service.GridApi
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         AppDatabase.initializeConnection(applicationContext)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
