@@ -6,26 +6,26 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/menu_home" />
 
         <item
             android:id="@+id/nav_grid_creator"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_add_24"
             android:title="@string/tworzenie_siatki" />
 
         <item
             android:id="@+id/nav_grid_list"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_list_24"
             android:title="@string/lista_siatek" />
 
         <item
             android:id="@+id/nav_code_list"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_grid_4x4_24"
             android:title="@string/list_pattern" />
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_settings_24"
             android:title="Ustawienia" />
     </group>
 </menu>
