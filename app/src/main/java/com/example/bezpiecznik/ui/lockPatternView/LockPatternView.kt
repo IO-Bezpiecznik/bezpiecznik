@@ -273,10 +273,52 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         var m_shape_switch:Boolean=true
         var l_shape_switch:Boolean=true
         var x_shape_switch:Boolean=true
-        var s_shape_switchx:Boolean=true
-        var s_shape_switchy:Boolean=true
-        var s_shape_dxlist= mutableListOf<Int>()
-        var s_shape_dylist= mutableListOf<Int>()
+        var s_shape_switch:Boolean=true
+        var snake_shape_switchx:Boolean=false
+        var snake_shape_switchy:Boolean=false
+        var snake_shape_dxlist= mutableListOf<Int>()
+        var snake_shape_dylist= mutableListOf<Int>()
+
+        //s_shape_check
+        if(rowCount%2==1&&columnCount%2==1&&allLines.count()==5){
+
+
+            if (abs(allLines.first().dx()) == columnCount-1&&allLines.first().dy()==0) {
+
+                if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+1].dx())==0){
+
+                    if(abs(allLines[allLines.indexOf(allLines.first())+2].dy())==0&&abs(allLines[allLines.indexOf(allLines.first())+2].dx())==columnCount-1) {
+                        if (abs(allLines[allLines.indexOf(allLines.first())+3].dx()) == 0&&abs(allLines[allLines.indexOf(allLines.first())+3].dy())==rowCount/2) {
+
+                            if(abs(allLines.last().dx())==columnCount-1&&allLines.last().dy()==0)
+                            _tmp_score = _score; score.value = 0; s_shape_switch = false
+                        }
+                    }
+
+                }
+
+            }
+
+            if (abs(allLines.first().dy()) == rowCount-1&&allLines.first().dx()==0) {
+
+                if(abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount/2&&abs(allLines[allLines.indexOf(allLines.first())+1].dy())==0){
+
+                    if(abs(allLines[allLines.indexOf(allLines.first())+2].dx())==0&&abs(allLines[allLines.indexOf(allLines.first())+2].dy())==rowCount-1) {
+                        if (abs(allLines[allLines.indexOf(allLines.first())+3].dy()) == 0&&abs(allLines[allLines.indexOf(allLines.first())+3].dx())==columnCount/2) {
+
+                            if(abs(allLines.last().dy())==rowCount-1&&allLines.last().dx()==0) {
+                                _tmp_score = _score; score.value =
+                                    0; s_shape_switch = false
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+        else if(allLines.count()>5&&s_shape_switch==false){score.value=_tmp_score}
+
 
         //x_shape_check
         if(allLines.count()==3) {
@@ -310,7 +352,6 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 if (abs(allLines.last().dy()) > 0 && abs(allLines.last().dx()) == 0) {
 
                     _tmp_score = _score; score.value = 0; l_shape_switch = false
-
                 }
             }
 
@@ -319,58 +360,57 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 if (abs(allLines.last().dx()) > 0 && abs(allLines.last().dy()) == 0) {
 
                     _tmp_score = _score; score.value = 0; l_shape_switch = false
-
                 }
             }
         }
         else if(allLines.count()>2&&l_shape_switch==false){score.value=_tmp_score}
 
-        //s_shape_check
+        //snake_shape_check
         if(allLines.count()==rowCount*2-1){
 
             for(i in 0 until allLines.count()-1){
 
-                s_shape_dxlist.add(i,abs(allLines[i].dx()))
-                s_shape_dylist.add(i,abs(allLines[i].dy()))
+                snake_shape_dxlist.add(i,abs(allLines[i].dx()))
+                snake_shape_dylist.add(i,abs(allLines[i].dy()))
 
 
 
             }
 
-            if(s_shape_dxlist[0]==columnCount-1&&s_shape_dylist[0]==0) {
+            if(snake_shape_dxlist[0]==columnCount-1&&snake_shape_dylist[0]==0) {
                 for (i in 0..allLines.count()-2 step 2) {
 
-                    if (s_shape_dxlist[i] != columnCount - 1&&s_shape_dylist[i]!=0) {
-                        s_shape_switchx = false
+                    if (snake_shape_dxlist[i] == columnCount - 1&&snake_shape_dylist[i]==0) {
+                        snake_shape_switchx = true
                     }
 
                 }
 
                 for(i in 1..allLines.count()-2 step 2){
 
-                    if (s_shape_dxlist[i] != 0&&s_shape_dylist[i]!=1) {
-                        s_shape_switchy = false
+                    if (snake_shape_dxlist[i] == 0&&snake_shape_dylist[i]==1) {
+                        snake_shape_switchy = true
                     }
                 }
             }
-            if(s_shape_dylist[0]==rowCount-1&&s_shape_dxlist[0]==0) {
+            if(snake_shape_dylist[0]==rowCount-1&&snake_shape_dxlist[0]==0) {
                 for (i in 0..allLines.count()-2 step 2) {
 
-                    if (s_shape_dylist[i] != rowCount - 1&&s_shape_dxlist[i]!=0) {
-                        s_shape_switchx = false
+                    if (snake_shape_dylist[i] == rowCount - 1&&snake_shape_dxlist[i]==0) {
+                        snake_shape_switchx = true
                     }
 
                 }
 
                 for(i in 1..allLines.count()-2 step 2){
 
-                    if (s_shape_dylist[i] != 0&&s_shape_dxlist[i]!=1) {
-                        s_shape_switchy = false
+                    if (snake_shape_dylist[i] == 0&&snake_shape_dxlist[i]==1) {
+                        snake_shape_switchy = true
                     }
                 }
             }
 
-            if(s_shape_switchx==true&&s_shape_switchy==true){score.value=0}
+            if(snake_shape_switchx==true&&snake_shape_switchy==true){score.value=0}
 
 
 
@@ -385,7 +425,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount/2){
 
-                    if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount/2) {
+                    if(abs(allLines[allLines.indexOf(allLines.first())+2].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+2].dx())==columnCount/2) {
                         if (abs(allLines.last().dx()) == columnCount - 1) {
                             _tmp_score = _score; score.value = 0; m_shape_switch = false
                         }
@@ -399,7 +439,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount/2){
 
-                    if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount/2) {
+                    if(abs(allLines[allLines.indexOf(allLines.first())+2].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+2].dx())==columnCount/2) {
                         if (abs(allLines.last().dy()) == rowCount - 1) {
                             _tmp_score = _score; score.value = 0; m_shape_switch = false
                         }
