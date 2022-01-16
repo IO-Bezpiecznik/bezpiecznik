@@ -51,6 +51,8 @@ class HomeFragment : Fragment() {
 
         lpv.score.observe(this.viewLifecycleOwner,{
             pbPoints.progress = it
+            binding.txtScore.text=it.toString()+"%"
+
         })
 
         val resetButton: Button = binding.btnReset
@@ -60,6 +62,8 @@ class HomeFragment : Fragment() {
             saveButton.isEnabled = false
             resetButton.isEnabled = false
         }
+
+
 
         resetButton.setOnClickListener {
             lpv.reset()
