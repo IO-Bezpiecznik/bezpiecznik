@@ -16,6 +16,8 @@ import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
 import com.example.bezpiecznik.R
 import org.json.JSONObject
+import java.lang.Math.abs
+import kotlin.math.floor
 
 class LockPatternView(context: Context, attributeSet: AttributeSet) :
     GridLayout(context, attributeSet) {
@@ -29,8 +31,10 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         const val DEFAULT_HIT_AREA_PADDING_RATIO = 0.14f
 
         const val INTERSECTION_POINTS = 3
-        const val TURN_POINTS = 1
+        const val KNIGHT_TURN_POINTS = 3
         const val NEW_DOT_POINTS = 1
+        const val RADIUS_POINTS=0.5
+        const val STARTPOINT_POINTS=-5
     }
 
     private var normalDotColor: Int = 0
@@ -75,6 +79,10 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
     val score: MutableLiveData<Int> = MutableLiveData()
     private var _score: Int = 0
 
+    var startpoint_tmp=true
+    var patternlist= arrayOf<Array<Int>>()
+
+
     init {
         normalDotColor = ContextCompat.getColor(context, R.color.normalColor)
         normalDotRadiusRatio = DEFAULT_RADIUS_RATIO
@@ -114,6 +122,9 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 }
             }
         }
+
+        // points for grid size
+        addPoints((dots.count() * RADIUS_POINTS).toInt())
     }
 
     private fun initPathPaint() {
@@ -147,6 +158,19 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
     private fun notifyDotSelected(dot: Dot){
         selectedDots.add(dot)
         addPoints(NEW_DOT_POINTS)
+
+        //startpoint points
+        if (startpoint_tmp==true)
+        {
+            startpoint_tmp=false
+            if(dot.x==0f&&dot.y==0f)
+            {
+
+                addPoints(STARTPOINT_POINTS)
+
+            }
+
+        }
 
         onPatternListener?.onProgress(generateSelectedIds())
         dot.setState(State.SELECTED)
@@ -183,7 +207,27 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                     addPoints(INTERSECTION_POINTS)
                 }
             }
+
+            for(line in allLines){
+                if((newLine.startPoint == line.endPoint && newLine.endPoint.x==line.endPoint.x && abs(line.startPoint.x-line.endPoint.x)>=2 && abs(newLine.endPoint.y-line.endPoint.y)>=1 )){
+                    addPoints(KNIGHT_TURN_POINTS)
+                }
+                if((newLine.startPoint == line.endPoint && newLine.endPoint.y==line.endPoint.y && abs(line.startPoint.y-line.endPoint.y)>=2 && abs(newLine.endPoint.x-line.endPoint.x)>=1 )){
+                    addPoints(KNIGHT_TURN_POINTS)
+                }
+            }
             allLines.add(newLine)
+        }
+
+        //pattern_check_list=generateSelectedIds()
+        checkGenericPatterns()
+
+        //pattern points value cap
+        if(_score>=100){
+
+            _score=100
+            score.value=_score
+
         }
     }
 
@@ -193,6 +237,116 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             ids.add(dot.index)
         }
         return ids
+    }
+
+    fun checkGenericPatterns(){
+
+        //square values
+        var square_top:Int=0
+        var square_left:Int=0
+        var square_bottom:Int=0
+        var square_right:Int=0
+        var square_check:Boolean=true
+
+        //S-shape values
+        var s_shape_checkx:Boolean=true
+        var s_shape_pattern:String=""
+        var s_shape_swith:Boolean=true
+        var s_shape_checky:Boolean=false
+
+        var tmp=dots.get(colAmount+3).getCenter().y-dots.first().getCenter().y
+
+        //initializing array
+        for (i in 0..rowCount) {
+            var array = arrayOf<Int>()
+            for (j in 0..columnCount) {
+                array += 0
+            }
+            patternlist += array
+        }
+
+
+
+        for (dot in selectedDots){
+
+
+            var dotx=dot.getCenter().x/dot.height
+            var doty=(dot.getCenter().y-dots.first().getCenter().y)/tmp
+
+
+
+            //square
+            if(dotx==0){square_left=square_left+1}
+            if(dotx==columnCount-1){square_right=square_right+1}
+            if(doty==0){square_top=square_top+1}
+            if(doty==rowCount-1){square_bottom=square_bottom+1}
+            if((dotx!=0&&dotx!=columnCount-1)&&(doty!=0&&doty!=rowCount-1)){square_check=false}
+            if(square_top==columnCount && square_bottom==columnCount && square_left==rowCount && square_right==rowCount&&square_check==true){
+
+                _score=0
+                score.value=_score
+            }
+
+            //S-Shape
+
+
+
+        }
+
+        s_shape_pattern=generateSelectedIds().toString()
+        if((((selectedDots.last().getCenter().y-dots.first().getCenter().y)/tmp)==rowCount-1&&selectedDots.last().getCenter().x/selectedDots.last().height==columnCount-1)||(((selectedDots.last().getCenter().y-dots.first().getCenter().y)/tmp)==0&&selectedDots.last().getCenter().x/selectedDots.last().height==0)){s_shape_swith=true}
+        if(selectedDots.count()==s_shape_pattern.count()) {
+            for (i in 0..rowCount - 1) {
+
+                if (s_shape_swith == true) {
+                    s_shape_swith = false
+                    for (j in 0..columnCount - 1) {
+                        if(s_shape_checky==false) {
+                            s_shape_checky=true
+                            if (selectedDots.get(i + j).index != i + j) {
+                                s_shape_checkx == false
+                            }
+                        }
+                        else{
+
+                            if (selectedDots.get(i + j+columnCount-1).index != i + j+columnCount-1) {
+                                s_shape_checkx == false
+                            }
+
+                        }
+
+                    }
+                } else {
+                    s_shape_swith = true
+                    for (j in columnCount - 1..0) {
+                        if(s_shape_checky==false) {
+                            s_shape_checky==true
+                            if (selectedDots.get(i + j).index != i + j) {
+                                s_shape_checkx = false
+                            }
+                        }
+                        else{
+
+                            if (selectedDots.get(i + j+columnCount-1).index != i + j+columnCount-1) {
+                                s_shape_checkx = false
+                            }
+
+                        }
+
+                    }
+
+                }
+
+
+            }
+
+        }
+        Log.i("MyArr",s_shape_pattern)
+
+
+
+
+
     }
 
     fun setPattern(patternString: String){
@@ -215,6 +369,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 onFinish()
             }
         } catch (e: Exception){
+
             isCleared = true
         }
     }
@@ -247,7 +402,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         if(!paddingChanged){
             paddingChanged = true
             val paddingV = (measuredHeight - (measuredWidth / columnCount) * rowCount) / 2
-            Log.i("MyAc", "$measuredHeight $measuredWidth")
+
             updatePadding(0, paddingV, 0, paddingV)
         }
     }
@@ -261,6 +416,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         }
         if(!isFinished && !isCleared){
             drawPattern(_patternString)
+
         }
     }
 
@@ -299,6 +455,11 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
     }
 
     fun reset() {
+        _score = 0
+        score.value = 0
+        //points for grid radius
+        addPoints((dots.count() * RADIUS_POINTS).toInt())
+        //
         for(dot in selectedDots){
             dot.reset()
         }
@@ -310,8 +471,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         isFinished = false
         isCleared = true
         allLines.clear()
-        _score = 0
-        score.value = 0
+        startpoint_tmp=true
         invalidate()
     }
 
