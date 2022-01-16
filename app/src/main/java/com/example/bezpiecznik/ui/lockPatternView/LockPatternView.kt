@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
 import com.example.bezpiecznik.R
+import com.example.bezpiecznik.data.AppDatabase_Impl
 import org.json.JSONObject
 import java.lang.Math.abs
 import kotlin.math.floor
@@ -180,18 +181,21 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         } else {
             linePath.lineTo(center.x.toFloat(),center.y.toFloat())
             val startDot: Dot = selectedDots[selectedDots.count() - 2]
-            val startPoint = MatrixPoint(startDot.index % columnCount, startDot.index / rowCount)
-            val endPoint = MatrixPoint(dot.index % columnCount, dot.index / rowCount)
+            val startPoint = MatrixPoint(startDot.index % columnCount, startDot.index / columnCount)
+            val endPoint = MatrixPoint(dot.index % columnCount, dot.index /columnCount)
             val newLine = PatternLine(startPoint.x, startPoint.y, endPoint.x, endPoint.y)
+            var isconeccted=false
             if(allLines.count() > 0){
                 if(allLines.last().dy() == 0 && newLine.dy() == 0){
                     // kreska pozioma
                     newLine.startPoint = allLines.last().startPoint
                     allLines.removeLast()
+                    isconeccted=true
                 } else if (allLines.last().dx() == 0 && newLine.dx() == 0){
                     // kreska pionowa
                     newLine.startPoint = allLines.last().startPoint
                     allLines.removeLast()
+                    isconeccted=true
                 } else if (allLines.last().dy() != 0 && newLine.dy() != 0){
                     // skosy
                     if(
@@ -199,6 +203,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                     ){
                         newLine.startPoint = allLines.last().startPoint
                         allLines.removeLast()
+                        isconeccted=true
                     }
                 }
             }
@@ -208,12 +213,22 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 }
             }
 
-            for(line in allLines){
-                if((newLine.startPoint == line.endPoint && newLine.endPoint.x==line.endPoint.x && abs(line.startPoint.x-line.endPoint.x)>=2 && abs(newLine.endPoint.y-line.endPoint.y)>=1 )){
-                    addPoints(KNIGHT_TURN_POINTS)
-                }
-                if((newLine.startPoint == line.endPoint && newLine.endPoint.y==line.endPoint.y && abs(line.startPoint.y-line.endPoint.y)>=2 && abs(newLine.endPoint.x-line.endPoint.x)>=1 )){
-                    addPoints(KNIGHT_TURN_POINTS)
+            if(!isconeccted) {
+                for (line in allLines) {
+                    if ((newLine.startPoint == line.endPoint &&
+                                newLine.endPoint.x == line.endPoint.x &&
+                                abs(line.startPoint.x - line.endPoint.x) >= 2 &&
+                                abs(newLine.endPoint.y - line.endPoint.y) >= 1)
+                    ) {
+                        addPoints(KNIGHT_TURN_POINTS)
+                    }
+                    if ((newLine.startPoint == line.endPoint &&
+                                newLine.endPoint.y == line.endPoint.y &&
+                                abs(line.startPoint.y - line.endPoint.y) >= 2 &&
+                                abs(newLine.endPoint.x - line.endPoint.x) >= 1)
+                    ) {
+                        addPoints(KNIGHT_TURN_POINTS)
+                    }
                 }
             }
             allLines.add(newLine)
@@ -229,6 +244,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             score.value=_score
 
         }
+
     }
 
     fun generateSelectedIds(): ArrayList<Int> {
@@ -247,6 +263,8 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         var square_bottom:Int=0
         var square_right:Int=0
         var square_check:Boolean=true
+        var square_second_check:Int=0
+        var _tmp_score=0
 
         //S-shape values
         var s_shape_checkx:Boolean=true
@@ -254,7 +272,6 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         var s_shape_swith:Boolean=true
         var s_shape_checky:Boolean=false
 
-        var tmp=dots.get(colAmount+3).getCenter().y-dots.first().getCenter().y
 
         //initializing array
         for (i in 0..rowCount) {
@@ -270,8 +287,10 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         for (dot in selectedDots){
 
 
-            var dotx=dot.getCenter().x/dot.height
-            var doty=(dot.getCenter().y-dots.first().getCenter().y)/tmp
+            var dotx=dot.index % columnCount
+            var doty=dot.index / columnCount
+
+
 
 
 
@@ -280,12 +299,20 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
             if(dotx==columnCount-1){square_right=square_right+1}
             if(doty==0){square_top=square_top+1}
             if(doty==rowCount-1){square_bottom=square_bottom+1}
-            if((dotx!=0&&dotx!=columnCount-1)&&(doty!=0&&doty!=rowCount-1)){square_check=false}
+            if((dotx!=0&&dotx!=columnCount-1)&&(doty!=0&&doty!=rowCount-1)){square_check=false; Log.i("MyArr","DUPAAA")}
+
+            if(square_second_check==-1){square_second_check=-2}
             if(square_top==columnCount && square_bottom==columnCount && square_left==rowCount && square_right==rowCount&&square_check==true){
 
-                _score=0
-                score.value=_score
+                _tmp_score=_score
+                Log.i("MyArr","LALALALA "+_tmp_score+"  "+_score)
+                square_second_check=-1
+                //square_check=false
+                score.value=0
             }
+            if(square_second_check==-2&&square_check==false){_score=_tmp_score; score.value=_score; square_second_check=0;Log.i("MyArr","JESTEMTU")}
+
+            Log.i("MyArr", "X "+square_check+" Y "+square_second_check)
 
             //S-Shape
 
@@ -294,54 +321,6 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         }
 
         s_shape_pattern=generateSelectedIds().toString()
-        if((((selectedDots.last().getCenter().y-dots.first().getCenter().y)/tmp)==rowCount-1&&selectedDots.last().getCenter().x/selectedDots.last().height==columnCount-1)||(((selectedDots.last().getCenter().y-dots.first().getCenter().y)/tmp)==0&&selectedDots.last().getCenter().x/selectedDots.last().height==0)){s_shape_swith=true}
-        if(selectedDots.count()==s_shape_pattern.count()) {
-            for (i in 0..rowCount - 1) {
-
-                if (s_shape_swith == true) {
-                    s_shape_swith = false
-                    for (j in 0..columnCount - 1) {
-                        if(s_shape_checky==false) {
-                            s_shape_checky=true
-                            if (selectedDots.get(i + j).index != i + j) {
-                                s_shape_checkx == false
-                            }
-                        }
-                        else{
-
-                            if (selectedDots.get(i + j+columnCount-1).index != i + j+columnCount-1) {
-                                s_shape_checkx == false
-                            }
-
-                        }
-
-                    }
-                } else {
-                    s_shape_swith = true
-                    for (j in columnCount - 1..0) {
-                        if(s_shape_checky==false) {
-                            s_shape_checky==true
-                            if (selectedDots.get(i + j).index != i + j) {
-                                s_shape_checkx = false
-                            }
-                        }
-                        else{
-
-                            if (selectedDots.get(i + j+columnCount-1).index != i + j+columnCount-1) {
-                                s_shape_checkx = false
-                            }
-
-                        }
-
-                    }
-
-                }
-
-
-            }
-
-        }
-        Log.i("MyArr",s_shape_pattern)
 
 
 
