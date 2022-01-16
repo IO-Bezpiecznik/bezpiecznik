@@ -274,8 +274,9 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         var l_shape_switch:Boolean=true
         var x_shape_switch:Boolean=true
         var s_shape_switch:Boolean=true
-        var snake_shape_switchx:Boolean=false
-        var snake_shape_switchy:Boolean=false
+        var snake_shape_switch:Int=0
+        var snake_shape_switchx:Int=0
+        var snake_shape_switchy:Int=0
         var snake_shape_dxlist= mutableListOf<Int>()
         var snake_shape_dylist= mutableListOf<Int>()
 
@@ -291,7 +292,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                         if (abs(allLines[allLines.indexOf(allLines.first())+3].dx()) == 0&&abs(allLines[allLines.indexOf(allLines.first())+3].dy())==rowCount/2) {
 
                             if(abs(allLines.last().dx())==columnCount-1&&allLines.last().dy()==0)
-                            _tmp_score = _score; score.value = 0; s_shape_switch = false
+                            Log.i("MyArr","SSS");_tmp_score = _score; score.value = 0; s_shape_switch = false
                         }
                     }
 
@@ -307,7 +308,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                         if (abs(allLines[allLines.indexOf(allLines.first())+3].dy()) == 0&&abs(allLines[allLines.indexOf(allLines.first())+3].dx())==columnCount/2) {
 
                             if(abs(allLines.last().dy())==rowCount-1&&allLines.last().dx()==0) {
-                                _tmp_score = _score; score.value =
+                                Log.i("MyArr","SSS");_tmp_score = _score; score.value =
                                     0; s_shape_switch = false
                             }
                         }
@@ -327,7 +328,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if(allLines[allLines.indexOf(allLines.first())+1].dy()==-allLines.first().dy()&&allLines[allLines.indexOf(allLines.first())+1].dx()==0){
 
-                    if(abs(allLines.last().dx())==columnCount-1){_tmp_score=_score; score.value=0; x_shape_switch=false}
+                    if(abs(allLines.last().dx())==columnCount-1){Log.i("MyArr","XXX");_tmp_score=_score; score.value=0; x_shape_switch=false}
 
                 }
 
@@ -337,7 +338,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if(allLines[allLines.indexOf(allLines.first())+1].dx()==-allLines.first().dx()&&allLines[allLines.indexOf(allLines.first())+1].dy()==0){
 
-                    if(abs(allLines.last().dy())==rowCount-1){_tmp_score=_score; score.value=0; x_shape_switch=false}
+                    if(abs(allLines.last().dy())==rowCount-1){Log.i("MyArr","XXX");_tmp_score=_score; score.value=0; x_shape_switch=false}
 
                 }
 
@@ -351,7 +352,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if (abs(allLines.last().dy()) > 0 && abs(allLines.last().dx()) == 0) {
 
-                    _tmp_score = _score; score.value = 0; l_shape_switch = false
+                    Log.i("MyArr","LLL");_tmp_score = _score; score.value = 0; l_shape_switch = false
                 }
             }
 
@@ -359,7 +360,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if (abs(allLines.last().dx()) > 0 && abs(allLines.last().dy()) == 0) {
 
-                    _tmp_score = _score; score.value = 0; l_shape_switch = false
+                    Log.i("MyArr","LLL");_tmp_score = _score; score.value = 0; l_shape_switch = false
                 }
             }
         }
@@ -381,7 +382,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 for (i in 0..allLines.count()-2 step 2) {
 
                     if (snake_shape_dxlist[i] == columnCount - 1&&snake_shape_dylist[i]==0) {
-                        snake_shape_switchx = true
+                        snake_shape_switchx++
                     }
 
                 }
@@ -389,15 +390,16 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 for(i in 1..allLines.count()-2 step 2){
 
                     if (snake_shape_dxlist[i] == 0&&snake_shape_dylist[i]==1) {
-                        snake_shape_switchy = true
+                        snake_shape_switchy++
                     }
                 }
             }
+
             if(snake_shape_dylist[0]==rowCount-1&&snake_shape_dxlist[0]==0) {
                 for (i in 0..allLines.count()-2 step 2) {
 
                     if (snake_shape_dylist[i] == rowCount - 1&&snake_shape_dxlist[i]==0) {
-                        snake_shape_switchx = true
+                        snake_shape_switchx++
                     }
 
                 }
@@ -405,12 +407,13 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
                 for(i in 1..allLines.count()-2 step 2){
 
                     if (snake_shape_dylist[i] == 0&&snake_shape_dxlist[i]==1) {
-                        snake_shape_switchy = true
+                        snake_shape_switchy++
                     }
                 }
             }
-
-            if(snake_shape_switchx==true&&snake_shape_switchy==true){score.value=0}
+            Log.i("MyArr",snake_shape_switchx.toString()+" "+snake_shape_switchy.toString()+" "+allLines.count())
+            if(snake_shape_switch>0){addPoints(NEW_DOT_POINTS)}
+            if(snake_shape_switchx+snake_shape_switchy==allLines.count()-1&&snake_shape_switch!=1){Log.i("MyArr","SSSNNak");score.value=0;snake_shape_switch++}
 
 
 
@@ -427,7 +430,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                     if(abs(allLines[allLines.indexOf(allLines.first())+2].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+2].dx())==columnCount/2) {
                         if (abs(allLines.last().dx()) == columnCount - 1) {
-                            _tmp_score = _score; score.value = 0; m_shape_switch = false
+                            Log.i("MyArr","MMM");_tmp_score = _score; score.value = 0; m_shape_switch = false
                         }
                     }
 
@@ -441,7 +444,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                     if(abs(allLines[allLines.indexOf(allLines.first())+2].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+2].dx())==columnCount/2) {
                         if (abs(allLines.last().dy()) == rowCount - 1) {
-                            _tmp_score = _score; score.value = 0; m_shape_switch = false
+                            Log.i("MyArr","MMM");_tmp_score = _score; score.value = 0; m_shape_switch = false
                         }
                     }
 
@@ -459,7 +462,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount-1){
 
-                    if(abs(allLines.last().dx())==columnCount-1){_tmp_score=_score; score.value=0; c_shape_switch=false}
+                    if(abs(allLines.last().dx())==columnCount-1){Log.i("MyArr","CCC");_tmp_score=_score; score.value=0; c_shape_switch=false}
 
                 }
 
@@ -469,7 +472,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if(abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount-1){
 
-                    if(abs(allLines.last().dy())==rowCount-1){_tmp_score=_score; score.value=0;c_shape_switch=false}
+                    if(abs(allLines.last().dy())==rowCount-1){Log.i("MyArr","CCC");_tmp_score=_score; score.value=0;c_shape_switch=false}
 
                 }
 
@@ -484,7 +487,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount-1&&abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount-1){
 
-                    if(abs(allLines.last().dx())==columnCount-1){_tmp_score=_score; score.value=0; z_shape_switch=false}
+                    if(abs(allLines.last().dx())==columnCount-1){Log.i("MyArr","ZZZ");_tmp_score=_score; score.value=0; z_shape_switch=false}
 
                 }
 
@@ -494,7 +497,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
 
                 if(abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount-1&&abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount-1){
 
-                    if(abs(allLines.last().dy())==rowCount-1){_tmp_score=_score; score.value=0;z_shape_switch=false}
+                    if(abs(allLines.last().dy())==rowCount-1){Log.i("MyArr","ZZZ");_tmp_score=_score; score.value=0;z_shape_switch=false}
 
                 }
 
