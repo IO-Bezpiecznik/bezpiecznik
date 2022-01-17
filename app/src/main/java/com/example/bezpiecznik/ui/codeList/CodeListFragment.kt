@@ -10,12 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.databinding.CodeListFragmentBinding
-import com.example.bezpiecznik.databinding.GridListFragmentBinding
 import com.example.bezpiecznik.types.Code
-import com.example.bezpiecznik.types.Grid
-import com.example.bezpiecznik.ui.gridList.GridListAdapter
-import com.example.bezpiecznik.ui.gridList.GridListItemClickInterface
-import com.example.bezpiecznik.ui.gridList.GridListViewModel
 import com.example.bezpiecznik.ui.home.HomeViewModel
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -55,7 +50,7 @@ class CodeListFragment : Fragment(), CodeListItemClickInterface {
 
     override fun onCodeListItemClicked(codeListItem: Code) {
         val board = Json.decodeFromJsonElement<List<List<Int>>>(Json.parseToJsonElement(codeListItem.grid.board) as JsonArray)
-        homeViewModel.gridID = codeListItem._id
+        homeViewModel.gridID = codeListItem.grid._id
         homeViewModel.gridPoints = board
         homeViewModel.size = listOf(board.count(), board[0].count())
         homeViewModel.pattern = codeListItem.pattern

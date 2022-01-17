@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.bezpiecznik.data.AppDatabase
 import com.example.bezpiecznik.databinding.ActivityMainBinding
 import com.example.bezpiecznik.service.GridApi
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         AppDatabase.initializeConnection(applicationContext)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_grid_creator, R.id.nav_grid_list, R.id.nav_export
+                R.id.nav_home, R.id.nav_grid_creator, R.id.nav_grid_list, R.id.nav_export, R.id.nav_start, R.id.nav_code_list
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
