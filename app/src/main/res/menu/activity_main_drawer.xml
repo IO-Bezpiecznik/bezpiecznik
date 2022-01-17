@@ -5,9 +5,14 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_start"
             android:icon="@drawable/ic_baseline_home_24"
-            android:title="@string/menu_home" />
+            android:title="@string/start" />
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_baseline_add_24"
+            android:title="@string/tworzenie_kodu" />
 
         <item
             android:id="@+id/nav_grid_creator"
@@ -26,6 +31,6 @@
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_baseline_settings_24"
-            android:title="Ustawienia" />
+            android:title="@string/ustawienia" />
     </group>
 </menu>
