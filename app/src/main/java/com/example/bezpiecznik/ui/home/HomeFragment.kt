@@ -61,6 +61,9 @@ class HomeFragment : Fragment() {
         if(homeViewModel.loadedFromList){
             saveButton.isEnabled = false
             resetButton.isEnabled = false
+        } else {
+            saveButton.isEnabled = true
+            resetButton.isEnabled = true
         }
 
 
