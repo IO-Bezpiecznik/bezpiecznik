@@ -54,6 +54,17 @@ class GridCreatorViewModel : ViewModel() {
     }
     val grid: LiveData<GridState> = _grid
 
+
+    fun initGrid() {
+        val initSize = Constants.DEFAULT_SIZE
+        val value = GridState(
+            initSize,
+            initSize,
+            BooleanArray(initSize * initSize) { true }
+        )
+        _grid.postValue(value)
+    }
+
     fun getGridSizeAdapter(context: Context): ArrayAdapter<Int> {
         return ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, Constants.VALUES)
     }

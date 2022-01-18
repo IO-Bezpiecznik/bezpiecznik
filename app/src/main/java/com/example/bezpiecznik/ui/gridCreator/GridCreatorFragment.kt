@@ -87,6 +87,8 @@ class GridCreatorFragment : Fragment() {
             binding.gridContainer.invalidate()
         })
 
+        viewModel.initGrid()
+
         binding.button.setOnClickListener {
             viewModel.saveGrid()
             val text = "Dodano siatkę"
