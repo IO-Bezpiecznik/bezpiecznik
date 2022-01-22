@@ -32,10 +32,6 @@ class GridListAdapter(
             val rows = board.size
             val cols = board[0].size
 
-            val width = view.context.resources.displayMetrics.widthPixels
-            val totalSpace = width - 750 - 4 * rows
-            val spacePerItem = totalSpace / if (rows > cols) rows else cols
-
             grid.columnCount = cols
             grid.rowCount = rows
 

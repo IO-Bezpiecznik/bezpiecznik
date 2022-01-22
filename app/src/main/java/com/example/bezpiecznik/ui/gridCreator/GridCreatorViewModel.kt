@@ -1,7 +1,6 @@
 package com.example.bezpiecznik.ui.gridCreator
 
 import android.content.Context
-import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +11,6 @@ import com.example.bezpiecznik.types.GridCreateDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import java.util.*
 
 class GridCreatorViewModel : ViewModel() {
     private val gridApi = GridApi()

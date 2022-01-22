@@ -1,11 +1,9 @@
 package com.example.bezpiecznik.ui.codeList
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
@@ -24,15 +22,9 @@ class CodeListAdapter(
         private val gridSize: TextView = view.findViewById(R.id.size_text)
         private val lpv: LockPatternView = view.findViewById(R.id.lpv_code)
         val btn: Button = view.findViewById(R.id.code_item_btn)
-        private val progressBar: ProgressBar = view.findViewById(R.id.progressBar)
-        private val pointsTextView: TextView = view.findViewById(R.id.points)
+
         fun setSize(s1: Int, s2: Int) {
             gridSize.text = view.resources.getString(R.string.grid_size, s1, s2)
-        }
-        fun generateBar(value: Int){
-            progressBar.max = 100
-            progressBar.progress = value
-            pointsTextView.text = "$value %"
         }
         fun generateCode(board: List<List<Int>>,pattern: String) {
             lpv.setGridPoints(board)
@@ -55,7 +47,6 @@ class CodeListAdapter(
         val board = Json.decodeFromJsonElement<List<List<Int>>>(boardElement)
         viewHolder.setSize(board[0].size, board.size)
         viewHolder.generateCode(board,data.pattern)
-        viewHolder.generateBar(data.points)
 
         viewHolder.btn.setOnClickListener {
             codeListItemClickInterface.onCodeListItemClicked(data)

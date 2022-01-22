@@ -1,27 +1,19 @@
 package com.example.bezpiecznik.ui.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.bezpiecznik.databinding.FragmentHomeBinding
 import com.example.bezpiecznik.types.CodeCreateDto
 import com.example.bezpiecznik.ui.lockPatternView.LockPatternView
 import kotlinx.serialization.json.*
-import org.json.JSONArray
 import android.provider.Settings.Secure
-import androidx.core.content.ContextCompat.getSystemService
-
-import android.telephony.TelephonyManager
 import android.widget.ProgressBar
-import androidx.core.content.ContextCompat
 
 
 class HomeFragment : Fragment() {
