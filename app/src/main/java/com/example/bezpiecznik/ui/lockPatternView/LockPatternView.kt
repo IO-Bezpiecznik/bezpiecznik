@@ -276,7 +276,6 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         //other-shapes values
         var z_shape_switch:Boolean=true
         var c_shape_switch:Boolean=true
-        var m_shape_switch:Boolean=true
         var l_shape_switch:Boolean=true
         var x_shape_switch:Boolean=true
         var s_shape_switch:Boolean=true
@@ -468,39 +467,7 @@ class LockPatternView(context: Context, attributeSet: AttributeSet) :
         }
 
 
-        //m_shape_check
-        if(rowCount%2==1&&columnCount%2==1&&allLines.count()==4){
 
-
-            if (abs(allLines.first().dx()) == columnCount-1) {
-
-                if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount/2){
-
-                    if(abs(allLines[allLines.indexOf(allLines.first())+2].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+2].dx())==columnCount/2) {
-                        if (abs(allLines.last().dx()) == columnCount - 1) {
-                            _tmp_score = _score; score.value = 0; m_shape_switch = false
-                        }
-                    }
-
-                }
-
-            }
-
-            if (abs(allLines.first().dy()) == rowCount-1) {
-
-                if(abs(allLines[allLines.indexOf(allLines.first())+1].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+1].dx())==columnCount/2){
-
-                    if(abs(allLines[allLines.indexOf(allLines.first())+2].dy())==rowCount/2&&abs(allLines[allLines.indexOf(allLines.first())+2].dx())==columnCount/2) {
-                        if (abs(allLines.last().dy()) == rowCount - 1) {
-                            _tmp_score = _score; score.value = 0; m_shape_switch = false
-                        }
-                    }
-
-                }
-
-            }
-        }
-        else if(allLines.count()>4&&m_shape_switch==false){score.value=_tmp_score}
 
 
         //c_shape_check
