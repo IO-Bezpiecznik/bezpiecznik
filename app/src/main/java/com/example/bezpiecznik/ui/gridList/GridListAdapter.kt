@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.setMargins
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bezpiecznik.R
 import com.example.bezpiecznik.types.Grid
@@ -43,6 +44,8 @@ class GridListAdapter(
                 val params = GridLayout.LayoutParams()
                 params.width = (16 * view.resources.displayMetrics.density).toInt()
                 params.height = (16 * view.resources.displayMetrics.density).toInt()
+                // Zadanie 2
+                params.setMargins(6)
                 imageView.layoutParams = params
 
                 imageView.setColorFilter(ContextCompat.getColor(view.context, R.color.normalColor))

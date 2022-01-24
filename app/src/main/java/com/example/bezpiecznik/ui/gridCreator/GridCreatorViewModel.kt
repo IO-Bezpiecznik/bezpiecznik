@@ -119,4 +119,19 @@ class GridCreatorViewModel : ViewModel() {
             gridApi.create(GridCreateDto(board = parsedArray.contentDeepToString()))
         }
     }
+
+    fun showHideAll() {
+        val gridState = _grid.value!!
+
+        val firstValue = gridState.grid[0]
+        val newGrid = gridState.grid.map { !firstValue }
+
+        _grid.postValue(
+            GridState(
+                gridState.row,
+                gridState.col,
+                newGrid.toBooleanArray()
+            )
+        )
+    }
 }
